@@ -1,0 +1,42 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: myapp-blue-green
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - myapp-gateway
+  http:
+  - name: myapp-test
+    match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(test=true)(;.*)?$"
+    route:
+    - destination:
+        host: my-guestbook.chapter5.svc.cluster.local
+        subset: $COLOR_TEST
+
+  - name: myapp-default
+    route:
+    - destination:
+        host: my-guestbook.chapter5.svc.cluster.local
+        subset: $COLOR_ACTIVE
+
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: myapp-blue-green
+spec:
+  host: my-guestbook.chapter5.svc.cluster.local
+  subsets:
+  - name: blue
+    labels:
+      color: blue
+  - name: green
+    labels:
+      color: green

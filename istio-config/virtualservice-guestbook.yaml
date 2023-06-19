@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: jenkins-master
+  namespace: chapter7
+spec:
+  hosts:
+  - "jenkins.learn2build.com"
+  gateways:
+  - istio-system/csvserver
+  http:
+    - route:
+      - destination:
+          host: jenkins-master
+          port:
+            number: 8080
+
+
+
+

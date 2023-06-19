@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: my-guestbook
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - app-gateway
+  http:
+    - route:
+      - destination:
+          host: my-guestbook.prod.svc.cluster.local
+          subset: prod 
+        weight: 100
+      - destination:
+          host: my-guestbook.prod.svc.cluster.local
+          subset: stage
+        weight: 0
+
+
+
+
+
